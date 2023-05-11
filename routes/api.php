@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\NoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,7 @@ Route::middleware('auth:api')->group(callback: function () {
     // User
     Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::put('/profile/update', [UserController::class, 'update'])->name('user.update');
+
+    // Notes
+    Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
 });
