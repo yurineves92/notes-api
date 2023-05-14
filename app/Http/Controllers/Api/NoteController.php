@@ -71,4 +71,39 @@ class NoteController extends Controller
             ], 500);
         }
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $note = Note::find($id);
+
+        if ($note === null) {
+            return response()->json([
+                'message' => 'Não foi possível encontrar a nota para atualizar.',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => 'Erro de validação',
+                'message' => $validator->errors(),
+            ], 422);
+        }
+
+        $newStatus = $request->input('status');
+        $timestamp = now();
+
+        $note->status = $newStatus;
+        $note->save();
+
+        $note->addStatusLog($newStatus, $timestamp);
+
+        return response()->json([
+            'message' => 'Status atualizado com sucesso.',
+            'data' => $note,
+        ], 200);
+    }
 }

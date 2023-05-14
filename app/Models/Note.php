@@ -38,6 +38,19 @@ class Note extends Model
         return $query;
     }
 
+    public function addStatusLog($newStatus, $timestamp)
+    {
+        $statusLog = json_decode($this->status_log, true) ?? [];
+
+        $statusLog[] = [
+            'status' => $newStatus,
+            'timestamp' => $timestamp,
+        ];
+
+        $this->status_log = $statusLog;
+        $this->save();
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
