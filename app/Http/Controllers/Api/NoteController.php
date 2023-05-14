@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->only(['user_id', 'body', 'status']);
         $notes = Note::where('user_id', '=', Auth::user()->id)->get();
         return response()->json(
             [

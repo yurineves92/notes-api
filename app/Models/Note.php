@@ -21,6 +21,23 @@ class Note extends Model
         'status_log'
     ];
 
+    public function scopeFilter($query, $filters)
+    {
+        if (isset($filters['user_id'])) {
+            $query->where('user_id', $filters['user_id']);
+        }
+
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['body'])) {
+            $query->where('body', $filters['body']);
+        }
+
+        return $query;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
