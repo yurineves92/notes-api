@@ -11,8 +11,8 @@ A Notes API é uma API de gerenciamento de notas, onde os usuários podem criar,
 
 1. Clone o repositório para a sua máquina local:
 
-```shell
-git clone https://github.com/seu-usuario/notes-api.git
+```
+git clone https://github.com/yurineves92/notes-api
 ```
 
 2. Navegue até o diretório do projeto:
