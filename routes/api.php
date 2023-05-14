@@ -28,4 +28,5 @@ Route::middleware('auth:api')->group(callback: function () {
 
     // Notes
     Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
+    Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
 });
