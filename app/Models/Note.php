@@ -32,7 +32,7 @@ class Note extends Model
         }
 
         if (isset($filters['body'])) {
-            $query->where('body', $filters['body']);
+            $query->where('body', 'LIKE', '%' . $filters['body'] . '%');
         }
 
         return $query;
