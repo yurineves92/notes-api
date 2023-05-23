@@ -106,4 +106,16 @@ class NoteController extends Controller
             'data' => $note,
         ], 200);
     }
+
+    public function destroy($id)
+    {
+        try {
+            Note::findOrFail($id)->delete();
+            return response()->json([
+                'message' => 'Nota removida com sucesso.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Não foi possível excluir a nota ou não existe.'], 404);
+        }
+    }
 }

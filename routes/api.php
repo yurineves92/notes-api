@@ -30,4 +30,5 @@ Route::middleware('auth:api')->group(callback: function () {
     Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
     Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
     Route::patch('/notes/{id}/status', [NoteController::class, 'updateStatus'])->name('notes.updateStatus');
+    Route::delete('/notes/{id}', [NoteController::class, 'destroy'])->name('notes.destroy');
 });
