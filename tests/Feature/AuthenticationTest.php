@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -18,14 +19,15 @@ class AuthenticationTest extends TestCase
      */
     public function testUserCanLogin()
     {
-        $user = factory(User::class)->create([
+        $user = Factory::factoryForModel(User::class)->create([
+            'name' => 'test',
             'email' => 'test@example.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('12345678'),
         ]);
 
-        $response = $this->post(route('auth.login'), [
+        $response = $this->post(route('login'), [
             'email' => 'test@example.com',
-            'password' => 'password',
+            'password' => '12345678',
         ]);
 
         $response->assertStatus(200);
