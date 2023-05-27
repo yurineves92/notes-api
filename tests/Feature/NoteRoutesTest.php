@@ -27,7 +27,6 @@ class NoteRoutesTest extends TestCase
         ])->get(route('notes.index'));
 
         $response->assertStatus(200);
-        // Add assertions for the expected response data here
     }
 
     /**
@@ -60,22 +59,28 @@ class NoteRoutesTest extends TestCase
         ])->json('POST', route('notes.store'), $data);
 
         $response->assertStatus(201);
-        // Add assertions for the expected response data here
     }
 
     public function testUpdateNoteStatus()
     {
         $user = User::factory()->create();
         $token = $user->createToken("notes-api")->accessToken;
-        var_dump($token);
         $note = Note::factory()->create(['user_id' => $user->id]);
-        var_dump($note->id);
+
+        $data = [
+            'status_log' => [
+                [
+                    'status' => 2,
+                    'timestamp' => now()->format('Y-m-d H:i:s'),
+                ],
+            ],
+        ];
+
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->json('PATCH', route('notes.updateStatus', ['id' => $note->id]), [
-            'status' => 2,
-        ]);
+            'Content-Type' => 'application/json',
+        ])->json('PATCH', route('notes.updateStatus', ['id' => $note->id]), $data);
 
         $response->assertStatus(200);
         // Adicione asserções para os dados de resposta esperados aqui
