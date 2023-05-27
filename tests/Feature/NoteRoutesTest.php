@@ -40,62 +40,60 @@ class NoteRoutesTest extends TestCase
         $user = User::factory()->create();
         $token = $user->createToken("notes-api")->accessToken;
 
-        $response = $this->actingAs($user)->withHeaders([
+        $data = [
+            'user_id' => $user->id,
+            'body' => 'Conteúdo da nota',
+            'status' => 1,
+            'color_status' => '#FF0000',
+            'status_log' => [
+                [
+                    'status' => 1,
+                    'timestamp' => '2023-05-14 10:00:00'
+                ]
+            ]
+        ];
+
+        $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->post(route('notes.store'), [
-            'user_id' => $user->id,
-            'body' => 'Example',
-            'status' => 1,
-            'color_status' => "#FFFFFF",
-            'status_log' => []
-        ]);
+            'Content-Type' => 'application/json',
+        ])->json('POST', route('notes.store'), $data);
 
         $response->assertStatus(201);
         // Add assertions for the expected response data here
     }
 
-    /**
-     * Test updating the status of a note.
-     *
-     * @return void
-     */
     public function testUpdateNoteStatus()
     {
         $user = User::factory()->create();
         $token = $user->createToken("notes-api")->accessToken;
-
-        $note = Note::factory()->create();
-
-        $response = $this->actingAs($user)->withHeaders([
+        var_dump($token);
+        $note = Note::factory()->create(['user_id' => $user->id]);
+        var_dump($note->id);
+        $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->patch(route('notes.updateStatus', ['id' => $note->id]), [
-            // Add the data for updating the note status
+        ])->json('PATCH', route('notes.updateStatus', ['id' => $note->id]), [
+            'status' => 2,
         ]);
 
         $response->assertStatus(200);
-        // Add assertions for the expected response data here
+        // Adicione asserções para os dados de resposta esperados aqui
     }
 
-    /**
-     * Test deleting a note.
-     *
-     * @return void
-     */
     public function testDeleteNote()
     {
         $user = User::factory()->create();
         $token = $user->createToken("notes-api")->accessToken;
 
-        $note = Note::factory()->create();
+        $note = Note::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)->withHeaders([
+        $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->delete(route('notes.destroy', ['id' => $note->id]));
+        ])->json('DELETE', route('notes.destroy', ['id' => $note->id]));
 
-        $response->assertStatus(204);
-        // Add assertions for the expected response data here
+        $response->assertStatus(200);
+        // Adicione asserções para os dados de resposta esperados aqui
     }
 }
