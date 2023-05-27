@@ -63,27 +63,24 @@ class NoteRoutesTest extends TestCase
 
     public function testUpdateNoteStatus()
     {
+        var_dump('entrou');die;
         $user = User::factory()->create();
         $token = $user->createToken("notes-api")->accessToken;
         $note = Note::factory()->create(['user_id' => $user->id]);
 
-        $data = [
-            'status_log' => [
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->json('PATCH', route('notes.updateStatus', ['id' => $note->id]), [
+            'status' => json_encode([
                 [
                     'status' => 2,
                     'timestamp' => now()->format('Y-m-d H:i:s'),
                 ],
-            ],
-        ];
-
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->json('PATCH', route('notes.updateStatus', ['id' => $note->id]), $data);
+            ]),
+        ]);
 
         $response->assertStatus(200);
-        // Adicione asserções para os dados de resposta esperados aqui
     }
 
     public function testDeleteNote()
